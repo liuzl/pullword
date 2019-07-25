@@ -1,11 +1,10 @@
 package pullword
 
 import (
-	"github.com/liuzl/ling"
 	"strings"
-)
 
-var nlp = ling.MustNLP(ling.Norm)
+	"github.com/liuzl/ling"
+)
 
 func GetNGramFromArray(min, max int, words []string) map[string]*Token {
 	if min <= 0 || max <= 0 || min > max {
