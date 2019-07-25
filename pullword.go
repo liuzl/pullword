@@ -26,16 +26,16 @@ func entropy(m map[string]float64) float64 {
 	if len(m) == 0 {
 		return 5.0
 	}
+	// only one element
+	if len(m) == 1 {
+		return 0.0
+	}
 	var p []float64
 	var total float64
 	for _, v := range m {
 		total += v
 	}
 
-	// only one element
-	if len(m) == 1 {
-		return 0.0
-	}
 	for _, v := range m {
 		p = append(p, v/total)
 	}
