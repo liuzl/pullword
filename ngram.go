@@ -2,8 +2,6 @@ package pullword
 
 import (
 	"strings"
-
-	"github.com/liuzl/ling"
 )
 
 func GetNGramFromArray(min, max int, words []string) map[string]*Token {
@@ -35,10 +33,6 @@ func GetNGramFromArray(min, max int, words []string) map[string]*Token {
 }
 
 func GetNGram(min, max int, input string) (map[string]*Token, int) {
-	d := ling.NewDocument(input)
-	if err := nlp.Annotate(d); err != nil {
-		return nil, 0
-	}
-	words := d.XRealTokens(ling.Norm)
+	words := Cut(input)
 	return GetNGramFromArray(min, max, words), len(words)
 }
