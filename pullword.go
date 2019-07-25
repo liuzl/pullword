@@ -23,10 +23,18 @@ func Entropy(p []float64) float64 {
 }
 
 func entropy(m map[string]float64) float64 {
+	if len(m) == 0 {
+		return 5.0
+	}
 	var p []float64
 	var total float64
 	for _, v := range m {
 		total += v
+	}
+
+	// only one element
+	if len(m) == 1 {
+		return 0.0
 	}
 	for _, v := range m {
 		p = append(p, v/total)
@@ -58,6 +66,9 @@ func calc(m map[string]*Token) {
 				sub1 := strings.Join(terms[:i], " ")
 				sub2 := strings.Join(terms[i:], " ")
 				//fmt.Printf("sub1=[%s], sub2=[%s]\n", sub1, sub2)
+				if m[sub1] == nil || m[sub2] == nil {
+					continue
+				}
 				s := m[sub1].Freq * m[sub2].Freq
 				if s > max {
 					max = s
@@ -76,5 +87,6 @@ func calc(m map[string]*Token) {
 
 		// calculate score
 		v.Score = v.Freq * v.Poly * v.Flex
+		//fmt.Println(k, v, v.Left, v.Right)
 	}
 }

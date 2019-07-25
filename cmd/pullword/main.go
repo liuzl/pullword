@@ -4,12 +4,14 @@ import (
 	"bufio"
 	"flag"
 	"fmt"
-	"github.com/golang/glog"
-	"github.com/liuzl/pullword"
 	"io"
 	"os"
 	"sort"
 	"strings"
+
+	"github.com/golang/glog"
+	"github.com/liuzl/pullword"
+	"zliu.org/goutil"
 )
 
 var (
@@ -50,8 +52,8 @@ func main() {
 	pullword.Process(m, total)
 	var l pullword.WordList
 	for k, v := range m {
-		if v.Score > 0.1 {
-			l = append(l, pullword.Word{strings.Join(strings.Fields(k), ""), v})
+		if v.Score > 0.5 && v.Flex > 0.5 {
+			l = append(l, pullword.Word{goutil.Join(strings.Fields(k)), v})
 		}
 	}
 	sort.Sort(l)
