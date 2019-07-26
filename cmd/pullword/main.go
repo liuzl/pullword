@@ -17,6 +17,7 @@ import (
 
 var (
 	input = flag.String("i", "input.txt", "input file")
+	o     = flag.String("o", "output.txt", "output file")
 )
 
 func main() {
@@ -56,7 +57,7 @@ func main() {
 		}
 		bar.Increment()
 	}
-	bar.FinishPrint("done!")
+	bar.FinishPrint("calculate ngram done!")
 	pullword.Process(m, total)
 	var l pullword.WordList
 	for k, v := range m {
@@ -64,8 +65,16 @@ func main() {
 			l = append(l, pullword.Word{goutil.Join(strings.Fields(k)), v})
 		}
 	}
-	sort.Sort(l)
-	for _, v := range l {
-		fmt.Printf("%s = %+v\n", v.Str, v.Info)
+	fmt.Printf("found %d words\n", len(l))
+	if len(l) > 0 {
+		out, err := os.Create(*o)
+		if err != nil {
+			glog.Fatal(err)
+		}
+		defer out.Close()
+		sort.Sort(l)
+		for _, v := range l {
+			fmt.Fprintf(out, "%s = %+v\n", v.Str, v.Info)
+		}
 	}
 }

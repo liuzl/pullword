@@ -4,6 +4,8 @@ import (
 	//"fmt"
 	"math"
 	"strings"
+
+	"github.com/cheggaaa/pb"
 )
 
 // Entropy computes the Shannon entropy of a distribution or the distance between
@@ -53,6 +55,7 @@ func Process(m map[string]*Token, total float64) {
 }
 
 func calc(m map[string]*Token) {
+	bar := pb.StartNew(len(m))
 	for k, v := range m {
 		// calculate the degree of polymerization
 		terms := strings.Fields(k)
@@ -88,5 +91,7 @@ func calc(m map[string]*Token) {
 		// calculate score
 		v.Score = v.Freq * v.Poly * v.Flex
 		//fmt.Println(k, v, v.Left, v.Right)
+		bar.Increment()
 	}
+	bar.FinishPrint("calculate ngram score done!")
 }
