@@ -9,6 +9,7 @@ import (
 	"sort"
 	"strings"
 
+	"github.com/cheggaaa/pb"
 	"github.com/golang/glog"
 	"github.com/liuzl/pullword"
 	"zliu.org/goutil"
@@ -20,6 +21,10 @@ var (
 
 func main() {
 	flag.Parse()
+	count, err := goutil.FileLineCount(*input)
+	if err != nil {
+		glog.Fatal(err)
+	}
 	file, err := os.Open(*input)
 	if err != nil {
 		glog.Fatal(err)
@@ -28,6 +33,7 @@ func main() {
 	br := bufio.NewReader(file)
 	m := make(map[string]*pullword.Token)
 	var total float64
+	bar := pb.StartNew(count)
 	for {
 		line, c := br.ReadString('\n')
 		if c == io.EOF {
@@ -48,7 +54,9 @@ func main() {
 				}
 			}
 		}
+		bar.Increment()
 	}
+	bar.FinishPrint("done!")
 	pullword.Process(m, total)
 	var l pullword.WordList
 	for k, v := range m {
